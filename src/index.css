@@ -17,11 +17,12 @@ body {
 
 .App {
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* display: flex; */
+  /* justify-content: center;
+  align-items: center; */
 }
 
+/* INTRODUCTION PAGE */
 .intro-page {
   display: flex;
   flex-direction: column;
@@ -73,4 +74,40 @@ body {
   font-size: 1rem;
   color: #f5f7fb;
   cursor: pointer;
+}
+
+.start-btn:active {
+  box-shadow: inset 0 0 10px #353535;
+}
+
+/* MAIN PAGE */
+.question-container {
+  border-bottom: 0.8px solid #dbdef0;
+  padding: 1rem;
+}
+
+.question {
+  font-family: "Karla", sans-serif;
+  font-size: 1rem;
+  color: #293264;
+  margin: 0;
+  margin-bottom: 0.7rem;
+}
+
+.answers-container {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  color: #293264;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.answer-btn {
+  border: 0.77px solid #4d5b9e;
+  border-radius: 7.7px;
+  padding: 4px 10px 4px 10px;
+  cursor: pointer;
+  min-width: fit-content;
 }
