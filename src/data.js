@@ -1,4 +1,4 @@
-{
+export default {
   results: [
     {
       category: "Entertainment: Music",
@@ -48,5 +48,5 @@
       correct_answer: "Chordata",
       incorrect_answers: ["Echinodermata", "Annelida", "Placazoa"],
     },
-  ];
-}
+  ],
+};
