@@ -2,6 +2,7 @@ import React from "react";
 
 export default function Question(props) {
   const [isSelected, setIsSelected] = React.useState(false);
+  const [optionsArray, setOptionsArray] = React.useState(randomizeOptions());
 
   if (props.checkMe) {
     let options = document.querySelectorAll(".answer-btn");
@@ -35,21 +36,42 @@ export default function Question(props) {
     }
   }
 
+  function randomizeOptions() {
+    let optionsArr = [...props.options, props.answer];
+    return shuffle(optionsArr);
+  }
+
+  function shuffle(array) {
+    const newArray = [...array];
+    const length = newArray.length;
+
+    for (let start = 0; start < length; start++) {
+      const randomPosition = Math.floor(
+        (newArray.length - start) * Math.random()
+      );
+      const randomItem = newArray.splice(randomPosition, 1);
+
+      newArray.push(...randomItem);
+    }
+
+    return newArray;
+  }
+
   return (
     <div className="question-container">
       <h3 className="question">{props.question}</h3>
       <div className="answers-container">
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {props.options[0]}
+          {optionsArray[0]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {props.options[1]}
+          {optionsArray[1]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {props.options[2]}
+          {optionsArray[2]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {props.answer}
+          {optionsArray[3]}
         </div>
       </div>
     </div>

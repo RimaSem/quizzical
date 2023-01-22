@@ -132,10 +132,25 @@ body {
   z-index: -1;
 }
 
+.check-answers-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0 1rem 0 1rem;
+}
+
+.check-answers-btn-container p {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #293264;
+}
+
 .check-answers-btn {
   height: 35px;
   padding: 0 1.4rem 0 1.4rem;
-  width: 130px;
+  width: 150px;
   background: #4d5b9e;
   border-radius: 10px;
   font-family: "Inter";
