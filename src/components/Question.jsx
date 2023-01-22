@@ -4,19 +4,34 @@ export default function Question(props) {
   const [isSelected, setIsSelected] = React.useState(false);
   const [optionsArray, setOptionsArray] = React.useState(randomizeOptions());
 
-  if (props.checkMe) {
-    let options = document.querySelectorAll(".answer-btn");
-    options.forEach((option) => {
-      if (option.textContent === props.answer) {
-        option.style.backgroundColor = "#94D7A2";
-        option.style.color = "#293264";
-        option.style.border = "none";
-      } else if (option.style.backgroundColor === "rgb(214, 219, 245)") {
-        option.style.backgroundColor = "#F8BCBC";
-        option.style.color = "grey";
-      }
-    });
-  }
+  React.useEffect(() => {
+    if (props.checkAnswers) {
+      let options = document.querySelectorAll(".answer-btn");
+      options.forEach((option) => {
+        if (option.textContent === props.answer) {
+          option.style.backgroundColor = "#94D7A2";
+          option.style.color = "#293264";
+          option.style.border = "none";
+        } else if (option.style.backgroundColor === "rgb(214, 219, 245)") {
+          option.style.backgroundColor = "#F8BCBC";
+          option.style.color = "grey";
+        }
+      });
+    } else if (props.playAgain) {
+      setIsSelected(false);
+      let options = document.querySelectorAll(".answer-btn");
+      options.forEach((option) => {
+        if (
+          option.style.backgroundColor === "rgb(148, 215, 162)" ||
+          option.style.backgroundColor === "rgb(248, 188, 188)"
+        ) {
+          option.style.backgroundColor = "rgb(245, 247, 251)";
+          option.style.border = "0.77px solid #4d5b9e";
+          option.style.color = "#293264";
+        }
+      });
+    }
+  }, [props.playAgain]);
 
   function highlightOption(e) {
     let btnColor = e.target.style.backgroundColor;

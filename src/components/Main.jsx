@@ -7,11 +7,21 @@ import smallBlobBottom from "../assets/blue-small.svg";
 export default function Main() {
   const [data, setData] = React.useState(database.results);
   const [checkAnswers, setCheckAnswers] = React.useState(false);
+  const [playAgain, setPlayAgain] = React.useState(true);
   // const [correctAnswers, setCorrectAnswers] = React.useState(5);
 
   // function answeredCorrectly(num) {
   //   setCorrectAnswers(num);
   // }
+  function reload() {
+    let getOptions = document.querySelectorAll(".answer-btn");
+    getOptions.forEach((option) => {
+      option.style.backgroundColor = "rgb(245, 247, 251)";
+      option.style.color = "#293264";
+      option.style.border = "0.77px solid #4d5b9e";
+    });
+  }
+
   const questions = data.map((obj) => {
     return (
       <Question
@@ -19,15 +29,12 @@ export default function Main() {
         question={obj.question}
         options={obj.incorrect_answers}
         answer={obj.correct_answer}
-        checkMe={checkAnswers}
+        checkAnswers={checkAnswers}
+        playAgain={playAgain}
         // answeredCorrectly={answeredCorrectly}
       />
     );
   });
-
-  function handleButton() {
-    setCheckAnswers((prev) => !prev);
-  }
 
   return (
     <div className="main-page-container">
@@ -38,7 +45,10 @@ export default function Main() {
         <button
           className="check-answers-btn"
           type="button"
-          onClick={handleButton}
+          onClick={() => {
+            setPlayAgain((prev) => !prev);
+            setCheckAnswers((prev) => !prev);
+          }}
         >
           {!checkAnswers ? "Check answers" : "Play again"}
         </button>
