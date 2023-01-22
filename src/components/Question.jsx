@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Question(props) {
   const [isSelected, setIsSelected] = React.useState(false);
-  const [optionsArray, setOptionsArray] = React.useState(randomizeOptions());
+  const [savedOptions, setSavedOptions] = React.useState(props.optionsArray);
 
   React.useEffect(() => {
     if (props.checkAnswers) {
@@ -18,6 +18,7 @@ export default function Question(props) {
         }
       });
     } else if (props.playAgain) {
+      setSavedOptions(props.optionsArray);
       setIsSelected(false);
       let options = document.querySelectorAll(".answer-btn");
       options.forEach((option) => {
@@ -51,42 +52,21 @@ export default function Question(props) {
     }
   }
 
-  function randomizeOptions() {
-    let optionsArr = [...props.options, props.answer];
-    return shuffle(optionsArr);
-  }
-
-  function shuffle(array) {
-    const newArray = [...array];
-    const length = newArray.length;
-
-    for (let start = 0; start < length; start++) {
-      const randomPosition = Math.floor(
-        (newArray.length - start) * Math.random()
-      );
-      const randomItem = newArray.splice(randomPosition, 1);
-
-      newArray.push(...randomItem);
-    }
-
-    return newArray;
-  }
-
   return (
     <div className="question-container">
       <h3 className="question">{props.question}</h3>
       <div className="answers-container">
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {optionsArray[0]}
+          {props.playAgain ? props.optionsArray[0] : savedOptions[0]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {optionsArray[1]}
+          {props.playAgain ? props.optionsArray[1] : savedOptions[1]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {optionsArray[2]}
+          {props.playAgain ? props.optionsArray[2] : savedOptions[2]}
         </div>
         <div className="answer-btn" onClick={(e) => highlightOption(e)}>
-          {optionsArray[3]}
+          {props.playAgain ? props.optionsArray[3] : savedOptions[3]}
         </div>
       </div>
     </div>

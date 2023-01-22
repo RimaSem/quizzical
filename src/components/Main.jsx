@@ -5,21 +5,25 @@ import smallBlobTop from "../assets/yellow-small.svg";
 import smallBlobBottom from "../assets/blue-small.svg";
 
 export default function Main() {
+  const [startOfGame, setStartOfGame] = React.useState(true);
   const [data, setData] = React.useState(database.results);
   const [checkAnswers, setCheckAnswers] = React.useState(false);
   const [playAgain, setPlayAgain] = React.useState(true);
-  // const [correctAnswers, setCorrectAnswers] = React.useState(5);
 
-  // function answeredCorrectly(num) {
-  //   setCorrectAnswers(num);
-  // }
-  function reload() {
-    let getOptions = document.querySelectorAll(".answer-btn");
-    getOptions.forEach((option) => {
-      option.style.backgroundColor = "rgb(245, 247, 251)";
-      option.style.color = "#293264";
-      option.style.border = "0.77px solid #4d5b9e";
-    });
+  function shuffle(array) {
+    const newArray = [...array];
+    const length = newArray.length;
+
+    for (let start = 0; start < length; start++) {
+      const randomPosition = Math.floor(
+        (newArray.length - start) * Math.random()
+      );
+      const randomItem = newArray.splice(randomPosition, 1);
+
+      newArray.push(...randomItem);
+    }
+
+    return newArray;
   }
 
   const questions = data.map((obj) => {
@@ -31,7 +35,9 @@ export default function Main() {
         answer={obj.correct_answer}
         checkAnswers={checkAnswers}
         playAgain={playAgain}
-        // answeredCorrectly={answeredCorrectly}
+        optionsArray={
+          playAgain && shuffle([...obj.incorrect_answers, obj.correct_answer])
+        }
       />
     );
   });
