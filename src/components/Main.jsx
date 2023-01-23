@@ -1,29 +1,29 @@
 import React from "react";
 import Question from "./Question";
-// import database from "../data.js";
 import smallBlobTop from "../assets/yellow-small.svg";
 import smallBlobBottom from "../assets/blue-small.svg";
 import { decode } from "html-entities";
+import FadeLoader from "react-spinners/FadeLoader";
 
 export default function Main() {
   const [data, setData] = React.useState([]);
-  const [correctAnswers, setCorrectAnswers] = React.useState(
-    correctAnswerArray()
-  );
+  const [correctAnswers, setCorrectAnswers] = React.useState([]);
   const [checkAnswers, setCheckAnswers] = React.useState(false);
   const [playAgain, setPlayAgain] = React.useState(true);
   const [newData, setNewData] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
+    setLoading(true);
     fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
       .then((result) => result.json())
-      .then((APIdata) => setData(APIdata.results));
+      .then((APIdata) => setData(APIdata.results))
+      .then(() => setLoading(false));
   }, [newData]);
 
   function shuffle(array) {
     const newArray = [...array];
     const length = newArray.length;
-
     for (let start = 0; start < length; start++) {
       const randomPosition = Math.floor(
         (newArray.length - start) * Math.random()
@@ -32,7 +32,6 @@ export default function Main() {
 
       newArray.push(...randomItem);
     }
-
     return newArray;
   }
 
@@ -73,25 +72,41 @@ export default function Main() {
 
   return (
     <div className="main-page-container">
-      <img className="upper-blob" src={smallBlobTop} />
-      <div className="all-questions">{questions}</div>
-      <div className="check-answers-btn-container">
-        {checkAnswers && <p>You scored {score()}/5 correct answers</p>}
-        <button
-          className="check-answers-btn"
-          type="button"
-          onClick={(e) => {
-            if (e.target.textContent === "Play again") {
-              setNewData((prev) => !prev);
-            }
-            setPlayAgain((prev) => !prev);
-            setCheckAnswers((prev) => !prev);
+      {loading ? (
+        <FadeLoader
+          color={"#1a6985"}
+          loading={loading}
+          cssOverride={{
+            marginTop: "20vh",
           }}
-        >
-          {!checkAnswers ? "Check answers" : "Play again"}
-        </button>
-      </div>
-      <img className="lower-blob" src={smallBlobBottom} />
+          size={100}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      ) : (
+        <div>
+          <img className="upper-blob" src={smallBlobTop} />
+          <div className="all-questions">{questions}</div>
+          <div className="check-answers-btn-container">
+            {checkAnswers && <p>You scored {score()}/5 correct answers</p>}
+            <button
+              className="check-answers-btn"
+              type="button"
+              onClick={(e) => {
+                if (e.target.textContent === "Play again") {
+                  setNewData((prev) => !prev);
+                }
+                setCorrectAnswers(correctAnswerArray);
+                setPlayAgain((prev) => !prev);
+                setCheckAnswers((prev) => !prev);
+              }}
+            >
+              {!checkAnswers ? "Check answers" : "Play again"}
+            </button>
+          </div>
+          <img className="lower-blob" src={smallBlobBottom} />
+        </div>
+      )}
     </div>
   );
 }
