@@ -1,14 +1,24 @@
 import React from "react";
 import Question from "./Question";
-import database from "../data.js";
+// import database from "../data.js";
 import smallBlobTop from "../assets/yellow-small.svg";
 import smallBlobBottom from "../assets/blue-small.svg";
+import { decode } from "html-entities";
 
 export default function Main() {
-  const [startOfGame, setStartOfGame] = React.useState(true);
-  const [data, setData] = React.useState(database.results);
+  const [data, setData] = React.useState([]);
+  const [correctAnswers, setCorrectAnswers] = React.useState(
+    correctAnswerArray()
+  );
   const [checkAnswers, setCheckAnswers] = React.useState(false);
   const [playAgain, setPlayAgain] = React.useState(true);
+  const [newData, setNewData] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple")
+      .then((result) => result.json())
+      .then((APIdata) => setData(APIdata.results));
+  }, [newData]);
 
   function shuffle(array) {
     const newArray = [...array];
@@ -26,13 +36,32 @@ export default function Main() {
     return newArray;
   }
 
+  function score() {
+    let count = 0;
+    const selectedOptions = document.querySelectorAll(".answer-btn");
+    selectedOptions.forEach((option) => {
+      if (option.style.backgroundColor === "rgb(214, 219, 245)") {
+        if (correctAnswers.includes(option.textContent)) {
+          count = count + 1;
+        }
+      }
+    });
+    return count;
+  }
+
+  function correctAnswerArray() {
+    let arr = [];
+    data.forEach((item) => arr.push(item.correct_answer));
+    return arr;
+  }
+
   const questions = data.map((obj) => {
     return (
       <Question
         key={obj.question}
-        question={obj.question}
+        question={decode(obj.question)}
         options={obj.incorrect_answers}
-        answer={obj.correct_answer}
+        answer={decode(obj.correct_answer)}
         checkAnswers={checkAnswers}
         playAgain={playAgain}
         optionsArray={
@@ -47,11 +76,14 @@ export default function Main() {
       <img className="upper-blob" src={smallBlobTop} />
       <div className="all-questions">{questions}</div>
       <div className="check-answers-btn-container">
-        {/* {checkAnswers && <p>You scored {correctAnswers}/5 correct answers</p>} */}
+        {checkAnswers && <p>You scored {score()}/5 correct answers</p>}
         <button
           className="check-answers-btn"
           type="button"
-          onClick={() => {
+          onClick={(e) => {
+            if (e.target.textContent === "Play again") {
+              setNewData((prev) => !prev);
+            }
             setPlayAgain((prev) => !prev);
             setCheckAnswers((prev) => !prev);
           }}
