@@ -13,3 +13,5 @@ The aim of this project was to practice React basics by building an app from scr
 - ViteJS
 - Open Trivia DB API
 - Figma
+
+![quizzical](https://user-images.githubusercontent.com/98835134/221943398-2087bd63-ece3-44be-a3e2-e1df6d3be8b2.png)
